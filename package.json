@@ -1,0 +1,98 @@
+{
+  "name": "generate-chinese-annotation",
+  "displayName": "generate-chinese-annotation",
+  "description": "",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.76.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "configuration": {
+      "title": "Generate Chinese Annotation Configuration",
+      "properties": {
+        "generate-chinese-annotation.enabled": {
+          "type": "boolean",
+          "description": "Controls whether translations are displayed (except commands).",
+          "default": true
+        },
+        "generate-chinese-annotation.style": {
+          "type": "object",
+          "description": "Style of comment. Changes require a restart of VS Code to take effect",
+          "properties": {
+            "fontSize": {
+              "type": "string",
+              "description": "The font size of the translation.",
+              "default": "16px"
+            },
+            "color": {
+              "type": "string",
+              "description": "The font color of the translation.",
+              "default": "#FF2D00"
+            },
+            "underline": {
+              "type": "boolean",
+              "description": "Whether the translated font needs to be underlined.",
+              "default": false
+            },
+            "backgroundColor": {
+              "type": "string",
+              "description": "Translated font color background.",
+              "default": "transparent"
+            },
+            "fontWeight": {
+              "type": "string",
+              "enum": [
+                "100",
+                "200",
+                "300",
+                "400",
+                "normal",
+                "500",
+                "600",
+                "700",
+                "bold",
+                "800",
+                "900"
+              ],
+              "description": "The font weight of the translation.",
+              "default": "normal"
+            },
+            "italic": {
+              "type": "boolean",
+              "description": "Whether the translation font is italic.",
+              "default": false
+            }
+          }
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "yarn run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "yarn run compile && yarn run lint",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.76.0",
+    "@types/glob": "^8.1.0",
+    "@types/mocha": "^10.0.1",
+    "@types/node": "16.x",
+    "@typescript-eslint/eslint-plugin": "^5.56.0",
+    "@typescript-eslint/parser": "^5.56.0",
+    "eslint": "^8.36.0",
+    "glob": "^8.1.0",
+    "mocha": "^10.2.0",
+    "typescript": "^4.9.5",
+    "@vscode/test-electron": "^2.3.0"
+  }
+}
