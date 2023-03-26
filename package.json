@@ -28,23 +28,19 @@
           "properties": {
             "fontSize": {
               "type": "string",
-              "description": "The font size of the translation.",
-              "default": "16px"
+              "description": "The font size of the translation."
             },
             "color": {
               "type": "string",
-              "description": "The font color of the translation.",
-              "default": "#FF2D00"
+              "description": "The font color of the translation."
             },
             "underline": {
               "type": "boolean",
-              "description": "Whether the translated font needs to be underlined.",
-              "default": false
+              "description": "Whether the translated font needs to be underlined."
             },
             "backgroundColor": {
               "type": "string",
-              "description": "Translated font color background.",
-              "default": "transparent"
+              "description": "Translated font color background."
             },
             "fontWeight": {
               "type": "string",
@@ -61,14 +57,20 @@
                 "800",
                 "900"
               ],
-              "description": "The font weight of the translation.",
-              "default": "normal"
+              "description": "The font weight of the translation."
             },
             "italic": {
               "type": "boolean",
-              "description": "Whether the translation font is italic.",
-              "default": false
+              "description": "Whether the translation font is italic."
             }
+          },
+          "default": {
+            "fontSize": "16px",
+            "color": "#FF2D00",
+            "underline": false,
+            "backgroundColor": "transparent",
+            "fontWeight": "normal",
+            "italic": false
           }
         }
       }
