@@ -2,7 +2,6 @@
 interface Contributions {
   enabled: boolean
   style: {
-    fontSize: string
     fontWeight: string
     color: string
     backgroundColor: string

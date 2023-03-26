@@ -26,10 +26,6 @@
           "type": "object",
           "description": "Style of comment. Changes require a restart of VS Code to take effect",
           "properties": {
-            "fontSize": {
-              "type": "string",
-              "description": "The font size of the translation."
-            },
             "color": {
               "type": "string",
               "description": "The font color of the translation."
@@ -65,7 +61,6 @@
             }
           },
           "default": {
-            "fontSize": "16px",
             "color": "#FF2D00",
             "underline": false,
             "backgroundColor": "transparent",
