@@ -9,4 +9,5 @@ interface Contributions {
     underline: boolean
     italic: boolean
   }
+  enabledTranslateFiles: string[]
 }

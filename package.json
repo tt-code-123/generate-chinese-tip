@@ -72,6 +72,23 @@
             "fontWeight": "normal",
             "italic": false
           }
+        },
+        "generate-chinese-annotation.enabledTranslateFiles": {
+          "type": "array",
+          "description": "The file in which the plug-in takes effect",
+          "items": {
+            "type": "string",
+            "enum": [
+              "typescript",
+              "javascript",
+              "typescriptreact",
+              "javascriptreact"
+            ]
+          },
+          "default": [
+            "typescript",
+            "typescriptreact"
+          ]
         }
       }
     }
