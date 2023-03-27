@@ -23,7 +23,7 @@ export class Handler {
   }
 
   matchRegular(activeEditor: TextEditor) {
-    const reg = /I18N/g;
+    const reg = /I18N\.[a-zA-Z\.0-9]{1,}(\s|(\}))/gm;
     const text = activeEditor.document.getText();
     const matchList: any = [...text.matchAll(reg)];
     const decorationOptions: DecorationOptions[] = [];
