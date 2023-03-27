@@ -61,7 +61,7 @@
             }
           },
           "default": {
-            "color": "#FF2D00",
+            "color": "rgba(153, 153, 153, 1)",
             "underline": false,
             "backgroundColor": "transparent",
             "fontWeight": "normal",

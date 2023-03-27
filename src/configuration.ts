@@ -1,8 +1,8 @@
-import * as vscode from 'vscode'
-import { SETTING_PREFIX } from './const'
+import * as vscode from "vscode";
+import { SETTING_PREFIX } from "./const";
 
 export class Configuration {
-  private configInfo: Contributions
+  private configInfo: Contributions;
 
   constructor() {
     this.configInfo = vscode.workspace
