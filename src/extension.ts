@@ -4,8 +4,9 @@ import { Global } from "./global";
 import { Handler } from "./handler";
 
 // this method is called when vs code is activated
-export function activate(context: vscode.ExtensionContext) {
+export async function activate(context: vscode.ExtensionContext) {
   const configuration = new Configuration();
+  await configuration.initI18nFileObj();
   const handler = new Handler(configuration);
   const configInfo = configuration.getConfigInfo();
   let activeEditor: vscode.TextEditor;
