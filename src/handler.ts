@@ -5,6 +5,8 @@ import {
   FileType,
   workspace,
   window,
+  Range,
+  TextLine,
 } from "vscode";
 import { Configuration } from "./configuration";
 import { Global } from "./global";
@@ -24,8 +26,27 @@ export class Handler {
     this.configInfo = configuration.getConfigInfo();
   }
 
-  setI18nConfiguration(i18nInfo: I18NFileType) {
-    this.i18nConfiguration = i18nInfo;
+  generateDecorations(range: Range, text: string) {
+    return {
+      range,
+      renderOptions: {
+        after: {
+          ...this.configInfo.style,
+          fontStyle: this.configInfo.style.italic ? "italic" : "normal",
+          textDecoration: this.configInfo.style.underline
+            ? "underline"
+            : "normal",
+          contentText: text,
+          margin: "0 0 0 16px",
+        },
+      },
+    };
+  }
+
+  generateTextLineInfo(activeEditor: TextEditor, index: number): TextLine {
+    const startPos = activeEditor.document.positionAt(index);
+    const textLine = activeEditor.document.lineAt(startPos);
+    return textLine;
   }
 
   static async initI18nFileObj() {
@@ -103,32 +124,58 @@ export class Handler {
   matchI18NRegular(activeEditor: TextEditor) {
     const reg = /(I18N)(\.[a-zA-Z0-9_]{0,}){1,}[\s\},\)]/gm;
     const text = activeEditor.document.getText();
-    const matchList: any = [...text.matchAll(reg)];
+    const matchList = [...text.matchAll(reg)];
     const decorationOptions: DecorationOptions[] = [];
 
-    matchList.forEach(async (match: any, index: number) => {
-      const startPos = activeEditor.document.positionAt(match.index);
-      const textLine = activeEditor.document.lineAt(startPos);
+    matchList.forEach(async (match: any) => {
+      const textLine = this.generateTextLineInfo(activeEditor, match.index);
       const range = textLine.range;
       const str: string = match[0];
       const strPath: string = str.replace(/[\s\},\)]/, "");
 
-      decorationOptions.push({
-        range,
-        renderOptions: {
-          after: {
-            ...this.configInfo.style,
-            fontStyle: this.configInfo.style.italic ? "italic" : "normal",
-            textDecoration: this.configInfo.style.underline
-              ? "underline"
-              : "normal",
-            contentText: (get(this.i18nConfiguration, strPath) as string) || "",
-            margin: "0 0 0 16px",
-          },
-        },
-      });
+      const contentText = get(this.i18nConfiguration, strPath);
+      let decorationArr = [];
+
+      if (typeof contentText === "object") {
+        decorationArr = this.matchI18NVariable(activeEditor, strPath);
+      }
+      decorationOptions.push(
+        this.generateDecorations(range, contentText as string)
+      );
+      decorationOptions.push(...decorationArr);
     });
     this.decorations = decorationOptions;
+  }
+
+  matchI18NVariable(activeEditor: TextEditor, expressionPath: string) {
+    const decorationArr: any[] = [];
+    const text = activeEditor.document.getText();
+    const textLine = this.generateTextLineInfo(
+      activeEditor,
+      text.indexOf(expressionPath)
+    );
+
+    const textLineInfoArr = textLine.text.trim().split(" ");
+    const regStr = textLineInfoArr[1] + "\\.{1,}[a-zA-Z0-9_.]{1,}";
+    const reg = new RegExp(regStr, "g");
+    const matchList = [...text.matchAll(reg)];
+
+    matchList.forEach((item) => {
+      const i18nExpressionPath = item[0].replace(
+        textLineInfoArr[1],
+        expressionPath
+      );
+      const textLineItem = this.generateTextLineInfo(activeEditor, item.index!);
+      const range = textLineItem.range;
+
+      decorationArr.push(
+        this.generateDecorations(
+          range,
+          get(this.i18nConfiguration, i18nExpressionPath) as string
+        )
+      );
+    });
+    return decorationArr;
   }
 
   applyDecorations(activeEditor: TextEditor): void {
