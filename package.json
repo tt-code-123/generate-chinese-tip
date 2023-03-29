@@ -86,7 +86,13 @@
           ]
         }
       }
-    }
+    },
+    "commands":[{
+      "command": "generateChineseAnnotation.regenerateI18N",
+      "title": "regenerate i18n",
+      "description": "regenerate I18N File Mapping",
+      "category": "Generate Chinese Annotation"
+    }]
   },
   "scripts": {
     "vscode:prepublish": "yarn run compile",

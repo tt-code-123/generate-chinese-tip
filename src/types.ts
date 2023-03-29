@@ -1,5 +1,5 @@
 /* 定义的配置类型 */
-interface Contributions {
+export interface Contributions {
   enabled: boolean;
   style: {
     fontWeight: string;
@@ -12,6 +12,11 @@ interface Contributions {
 }
 
 /* 读取i18n文件路径类型 */
-interface I18NFileType {
+export interface I18NFileType {
   [key: string]: I18NFileType | string;
+}
+
+/* 命令id */
+export const enum CommandId {
+  regenerateI18N = "generateChineseAnnotation.regenerateI18N",
 }
