@@ -18,5 +18,5 @@ export interface I18NFileType {
 
 /* 命令id */
 export const enum CommandId {
-  regenerateI18N = "generateChineseAnnotation.regenerateI18N",
+  regenerateI18N = "generateChineseTip.regenerateI18N",
 }

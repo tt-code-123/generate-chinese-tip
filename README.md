@@ -1,6 +1,6 @@
-# generate-chinese-annotation README
+# generate-chinese-tip README
 
-This is the README for your extension "generate-chinese-annotation". After writing up a brief description, we recommend including the following sections.
+This is the README for your extension "generate-chinese-tip". After writing up a brief description, we recommend including the following sections.
 
 ## Features
 
