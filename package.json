@@ -3,7 +3,7 @@
   "displayName": "Generate Chinese Tip",
   "description": "",
   "version": "0.0.1",
-  "publisher":"tt",
+  "publisher":"Nickel",
   "engines": {
     "vscode": "^1.76.0"
   },
