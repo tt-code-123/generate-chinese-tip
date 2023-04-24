@@ -3,6 +3,8 @@ import { registerAllCommands } from "./commands";
 import { Configuration } from "./configuration";
 import { Global } from "./global";
 import { Handler } from "./handler";
+import { getRootPath } from "./utils";
+import { ModeEnum } from "./types";
 
 // this method is called when vs code is activated
 export async function activate(context: ExtensionContext) {
@@ -15,7 +17,15 @@ export async function activate(context: ExtensionContext) {
 
   const configInfo = configuration.getConfigInfo();
 
-  await Handler.initI18nFileObj();
+  const rootPath = getRootPath();
+  if (rootPath) {
+    const res = await Handler.initI18nFileObj(`${rootPath}/src/i18n/langs`);
+    Handler.setI18nConfiguration({
+      I18N: {
+        ...res,
+      },
+    });
+  }
 
   // 执行翻译
   const translate = function () {
@@ -31,7 +41,9 @@ export async function activate(context: ExtensionContext) {
     Global.decorationType?.dispose();
     Global.setDecorationType(window.createTextEditorDecorationType({}));
     handler.matchI18NRegular(activeEditor);
-    handler.applyDecorations(activeEditor);
+    configInfo.mode === ModeEnum.REPLACE
+      ? handler.applyDecorations(activeEditor)
+      : handler.applyReplace(activeEditor);
   };
 
   // 获取活动编辑器并执行首次翻译

@@ -94,6 +94,15 @@
             "typescript",
             "typescriptreact"
           ]
+        },
+        "generate-chinese-tip.mode":{
+          "type":"string",
+          "enum": [
+            "TIP",
+            "REPLACE"
+          ],
+          "description": "TIP: Entry prompt; REPLACE: Entry expression replace;",
+          "default": "TIP"
         }
       }
     },
