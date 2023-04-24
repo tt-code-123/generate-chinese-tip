@@ -1,9 +1,8 @@
-# Change Log
+### **0.0.1**
 
-All notable changes to the "generate-chinese-tip" extension will be documented in this file.
+1. 新增I18N.xxx.xxx表达式旁边展示其对应的中文。
 
-Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
+### 0.0.2
 
-## [Unreleased]
-
-- Initial release
+1. 使用AST重写词条匹配逻辑。
+2. 新增I18N.xxx.xxx替换为对应的中文。
