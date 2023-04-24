@@ -260,12 +260,12 @@ export class Handler {
    */
   applyReplace(activeEditor: TextEditor): void {
     this.decorations.forEach((decoration) => {
-      activeEditor.edit((editBuilder) => {
-        editBuilder.replace(
-          decoration.range,
-          decoration.renderOptions?.after?.contentText!
-        );
-      });
+      const contentText = decoration.renderOptions?.after?.contentText;
+      if (contentText && contentText !== "'undefined'") {
+        activeEditor.edit((editBuilder) => {
+          editBuilder.replace(decoration.range, contentText);
+        });
+      }
     });
   }
 
