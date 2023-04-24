@@ -41,7 +41,7 @@ export async function activate(context: ExtensionContext) {
     Global.decorationType?.dispose();
     Global.setDecorationType(window.createTextEditorDecorationType({}));
     handler.matchI18NRegular(activeEditor);
-    configInfo.mode === ModeEnum.REPLACE
+    configInfo.mode === ModeEnum.TIP
       ? handler.applyDecorations(activeEditor)
       : handler.applyReplace(activeEditor);
   };
