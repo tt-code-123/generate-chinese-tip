@@ -61,7 +61,10 @@ export class Handler {
     const startPos = activeEditor.document.positionAt(match.index!);
     const endPos = startPos.with({
       character:
-        startPos.character + match[0].indexOf(match[2]) + match[2].length,
+        startPos.character +
+        (match[2]
+          ? match[0].indexOf(match[2]) + match[2].length
+          : match[0].length),
     });
     const textLine = activeEditor.document.lineAt(startPos);
     return {
@@ -200,12 +203,13 @@ export class Handler {
       const contentText = `'${get(this.i18nConfiguration, strPath)}'`;
       let decorationArr = [];
 
-      if (typeof contentText === "object") {
+      if (contentText === "'[object Object]'") {
         decorationArr = this.matchI18NVariable(activeEditor, strPath);
+      } else {
+        decorationOptions.push(
+          this.generateDecorations(position.range, contentText as string)
+        );
       }
-      decorationOptions.push(
-        this.generateDecorations(position.range, contentText as string)
-      );
       decorationOptions.push(...decorationArr);
     });
     this.decorations = decorationOptions;
@@ -239,7 +243,7 @@ export class Handler {
       decorationArr.push(
         this.generateDecorations(
           range,
-          get(this.i18nConfiguration, i18nExpressionPath) as string
+          `'${get(this.i18nConfiguration, i18nExpressionPath)}'` as string
         )
       );
     });
