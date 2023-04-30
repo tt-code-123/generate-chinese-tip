@@ -113,6 +113,14 @@
         "description": "regenerate I18N File Mapping",
         "category": "Generate Chinese Tip"
       }
+    ],
+    "keybindings": [
+      {
+        "command": "generateChineseTip.regenerateI18N",
+        "key": "ctrl+1",
+        "mac": "cmd+1",
+        "when": "editorTextFocus"
+      }
     ]
   },
   "scripts": {
