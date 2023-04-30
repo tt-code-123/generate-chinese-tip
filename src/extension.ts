@@ -1,4 +1,10 @@
-import { TextEditor, ExtensionContext, window, workspace } from "vscode";
+import {
+  TextEditor,
+  ExtensionContext,
+  window,
+  workspace,
+  Disposable,
+} from "vscode";
 import { registerAllCommands } from "./commands";
 import { Configuration } from "./configuration";
 import { Global } from "./global";
@@ -61,7 +67,7 @@ export async function activate(context: ExtensionContext) {
   }
 
   // 如果在同一文档中更改了文本，则触发更新
-  const changeTextDisposable = workspace.onDidChangeTextDocument(
+  workspace.onDidChangeTextDocument(
     (event) => {
       if (activeEditor && event.document === activeEditor.document) {
         triggerUpdateTranslate();
@@ -72,7 +78,7 @@ export async function activate(context: ExtensionContext) {
   );
 
   // 活动编辑器更改时触发的事件
-  const changeActiveTextDisposable = window.onDidChangeActiveTextEditor(
+  window.onDidChangeActiveTextEditor(
     async (editor) => {
       if (editor) {
         activeEditor = editor;
@@ -84,7 +90,7 @@ export async function activate(context: ExtensionContext) {
   );
 
   // 监听配置的修改
-  const changeAConfigurationDisposable = workspace.onDidChangeConfiguration(
+  workspace.onDidChangeConfiguration(
     (event) => {
       if (event.affectsConfiguration(`${SETTING_PREFIX}.mode`)) {
         const config = workspace
@@ -95,13 +101,9 @@ export async function activate(context: ExtensionContext) {
         configInfo = configuration.getConfigInfo();
         triggerUpdateTranslate();
       }
-    }
-  );
-
-  context.subscriptions.push(
-    changeTextDisposable,
-    changeActiveTextDisposable,
-    changeAConfigurationDisposable
+    },
+    null,
+    context.subscriptions
   );
 }
 
