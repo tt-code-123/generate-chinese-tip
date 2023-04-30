@@ -276,4 +276,8 @@ export class Handler {
   static setI18nConfiguration(obj: I18NFileType) {
     Handler.that.i18nConfiguration = obj;
   }
+
+  setConfigInfo(configInfo: Contributions) {
+    this.configInfo = configInfo;
+  }
 }

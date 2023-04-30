@@ -14,4 +14,8 @@ export class Configuration {
   getConfigInfo() {
     return this.configInfo;
   }
+
+  setConfigInfo(configInfo: Contributions) {
+    this.configInfo = configInfo;
+  }
 }

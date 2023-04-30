@@ -4,7 +4,8 @@ import { Configuration } from "./configuration";
 import { Global } from "./global";
 import { Handler } from "./handler";
 import { getRootPath } from "./utils";
-import { ModeEnum } from "./types";
+import { Contributions, ModeEnum } from "./types";
+import { SETTING_PREFIX } from "./const";
 
 // this method is called when vs code is activated
 export async function activate(context: ExtensionContext) {
@@ -14,8 +15,7 @@ export async function activate(context: ExtensionContext) {
   const handler = new Handler(configuration);
   let activeEditor: TextEditor;
   let timeout: NodeJS.Timer;
-
-  const configInfo = configuration.getConfigInfo();
+  let configInfo = configuration.getConfigInfo();
 
   const rootPath = getRootPath();
   if (rootPath) {
@@ -46,6 +46,14 @@ export async function activate(context: ExtensionContext) {
       : handler.applyReplace(activeEditor);
   };
 
+  // 避免频繁调用update
+  function triggerUpdateTranslate() {
+    if (timeout) {
+      clearTimeout(timeout);
+    }
+    timeout = setTimeout(translate, 1000);
+  }
+
   // 获取活动编辑器并执行首次翻译
   if (window.activeTextEditor) {
     activeEditor = window.activeTextEditor;
@@ -53,7 +61,7 @@ export async function activate(context: ExtensionContext) {
   }
 
   // 如果在同一文档中更改了文本，则触发更新
-  workspace.onDidChangeTextDocument(
+  const changeTextDisposable = workspace.onDidChangeTextDocument(
     (event) => {
       if (activeEditor && event.document === activeEditor.document) {
         triggerUpdateTranslate();
@@ -64,7 +72,7 @@ export async function activate(context: ExtensionContext) {
   );
 
   // 活动编辑器更改时触发的事件
-  window.onDidChangeActiveTextEditor(
+  const changeActiveTextDisposable = window.onDidChangeActiveTextEditor(
     async (editor) => {
       if (editor) {
         activeEditor = editor;
@@ -75,13 +83,26 @@ export async function activate(context: ExtensionContext) {
     context.subscriptions
   );
 
-  // 避免频繁调用update
-  function triggerUpdateTranslate() {
-    if (timeout) {
-      clearTimeout(timeout);
+  // 监听配置的修改
+  const changeAConfigurationDisposable = workspace.onDidChangeConfiguration(
+    (event) => {
+      if (event.affectsConfiguration(`${SETTING_PREFIX}.mode`)) {
+        const config = workspace
+          .getConfiguration()
+          .get(SETTING_PREFIX) as Contributions;
+        configuration.setConfigInfo(config);
+        handler.setConfigInfo(config);
+        configInfo = configuration.getConfigInfo();
+        triggerUpdateTranslate();
+      }
     }
-    timeout = setTimeout(translate, 1000);
-  }
+  );
+
+  context.subscriptions.push(
+    changeTextDisposable,
+    changeActiveTextDisposable,
+    changeAConfigurationDisposable
+  );
 }
 
 // This method is called when your extension is deactivated
